@@ -1,43 +1,42 @@
 from config import *
 
-MySSIT = SSIT(SSIT_conf, Tubes)
 
-# MySSIT.print_struct(2)
+def prepare_system(SSIT):
+    SSIT.initialize_wells()
+    SSIT.set_parents()
+    SSIT.set_childs()
+    return SSIT
 
-MySSIT.initialize_wells()
+def add_eqns(SSIT):
+    SSIT.add_eqns_for_wells()
+    SSIT.set_eqns_for_Q()
+    SSIT.add_eqns_for_tubes()
+    return SSIT
 
-# MySSIT.print_wells()
-
-MySSIT.set_parents()
-
-# MySSIT.print_parents()
-
-MySSIT.add_eqns_for_wells()
-
-MySSIT.set_childs()
-
-# MySSIT.print_childs()
-
-MySSIT.set_eqns_for_Q()
-
-MySSIT.add_eqns_for_tubes()
+def solve_and_assign(SSIT):
+    SSIT.solve_system()
+    SSIT.set_pressures()
+    SSIT.calculate_k()
+    return SSIT
 
 
-print(MySSIT.system)
 
-MySSIT.solve_system()
+def main(SSIT_conf, Tubes):
 
-MySSIT.print_solution()
+    MySSIT = SSIT(SSIT_conf, Tubes)
 
-solution = MySSIT.solution
+    MySSIT = prepare_system(MySSIT)
 
-MySSIT.set_pressures()
+    MySSIT = add_eqns(MySSIT)
 
-MySSIT.print_pressures()
+    MySSIT = solve_and_assign(MySSIT)
 
-MySSIT.calculate_k()
+    MySSIT.print_pressures()
 
-print("k = " + str(MySSIT.get_k()))
+    print("k = " + str(MySSIT.get_k()))
 
+
+if __name__ == "__main__":
+    main(SSIT_conf, Tubes)
 
 
