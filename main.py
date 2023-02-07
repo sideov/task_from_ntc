@@ -5,6 +5,8 @@ def prepare_system(SSIT):
     SSIT.initialize_wells()
     SSIT.set_parents()
     SSIT.set_childs()
+    SSIT.set_p0(5)
+    SSIT.set_dt(1)
     return SSIT
 
 def add_eqns(SSIT):

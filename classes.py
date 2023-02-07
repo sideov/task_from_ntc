@@ -10,8 +10,8 @@ class Node():
         self.alpha = alpha
         self.C = C
         self.is_well = False
-        self.eqn = ""
-        self.parent = ""
+        self.eqn = None
+        self.parent = None
         self.is_stok = False
         self.childs = []
 
@@ -32,12 +32,12 @@ class Stok():
 
 
 class Tube():
-    def __init__(self, from_node_number, to_node_number, mu, D, lenght):
+    def __init__(self, from_node_number, to_node_number, mu, D, length):
         self.from_node = from_node_number
         self.to_node = to_node_number
         self.mu = mu
         self.D = D
-        self.length = lenght
+        self.length = length
 
 
 class SSIT:
@@ -67,7 +67,6 @@ class SSIT:
 
 
     def initialize_wells(self):
-        self.Nodes = list(self.struct.keys())[1:]
         for node in self.Nodes:
             if len(self.struct[node]) == 0:
                 node.is_well = True
@@ -95,7 +94,6 @@ class SSIT:
             self.eqns_for_p.append(eqn2)
 
     def set_eqns_for_Q(self):
-        self.Nodes = list(self.struct.keys())[1:]
 
         for node in self.Nodes:
             if node.childs:
@@ -109,7 +107,6 @@ class SSIT:
 
 
     def add_eqns_for_tubes(self):
-        self.Nodes = list(self.struct.keys())[1:]
         for tube in self.tubes:
             if tube.to_node == 0:
                 eqn = f"(p{tube.from_node} - {self.p0}) * {tube.D}/({tube.length**2}*{tube.mu}) - Q{tube.from_node}"
@@ -129,8 +126,13 @@ class SSIT:
     def print_solution(self):
         print(self.solution)
 
+    def set_p0(self, p0):
+        self.p0 = p0
+
+    def set_dt(self, dt):
+        self.dt = dt
+
     def set_pressures(self):
-        self.Nodes = list(self.struct.keys())[1:]
 
         for key in self.solution.keys():
             key = str(key)
@@ -142,7 +144,6 @@ class SSIT:
 
 
     def print_pressures(self):
-        self.Nodes = list(self.struct.keys())[1:]
 
         for node in self.Nodes:
             print(f"p{node.number} = {node.pressure}")
@@ -150,7 +151,7 @@ class SSIT:
 
 
     def calculate_k(self):
-        self.Nodes = list(self.struct.keys())[1:]
+
         self.k = 0
 
         for well in self.wells:
@@ -168,14 +169,12 @@ class SSIT:
 
 
     def set_childs(self):
-        self.Nodes = list(self.struct.keys())[1:]
 
         for node in self.Nodes:
             node.childs = self.struct[node]
 
 
     def print_childs(self):
-        self.Nodes = list(self.struct.keys())[1:]
         for node in self.Nodes:
             print(f"Node {node.name} has childs {list(child.name for child in node.childs)}")
 
@@ -183,7 +182,6 @@ class SSIT:
 
 
     def set_parents(self):
-        self.Nodes = list(self.struct.keys())[1:]
 
         for node in self.Nodes:
             if self.struct[node]:
@@ -194,7 +192,6 @@ class SSIT:
 
 
     def print_parents(self):
-        self.Nodes = list(self.struct.keys())[1:]
         for node in self.Nodes:
             if node.parent:
                 print(f'{node.name} has parent {node.parent.name}')
