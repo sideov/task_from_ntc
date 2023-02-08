@@ -1,8 +1,10 @@
 from classes import *
 
-p = 5
+p0 = 3
 
-Main_Stok = Stok(p)
+dt = 10
+
+Main_Stok = Stok(p0)
 
 
 Nodes = []
@@ -10,17 +12,17 @@ Nodes = []
 for i in range(12):
     Nodes.append(Node(i))
 
-Nodes[7].alpha = -1
-Nodes[8].alpha = -1
-Nodes[9].alpha = -1
-Nodes[10].alpha = -1
-Nodes[11].alpha = -1
+Nodes[7].alpha = -0.2
+Nodes[8].alpha = -0.2
+Nodes[9].alpha = -0.2
+Nodes[10].alpha = -0.2
+Nodes[11].alpha = -0.2
 
-Nodes[7].C = 3
-Nodes[8].C = 3
-Nodes[9].C = 3
-Nodes[10].C = 3
-Nodes[11].C = 3
+Nodes[7].C = 5
+Nodes[8].C = 5
+Nodes[9].C = 5
+Nodes[10].C = 5
+Nodes[11].C = 5
 
 # Nodes[7].Q = sym.Symbol(f"p{Nodes[7].number} * {Nodes[7].alpha}")
 # Nodes[8].Q = sym.Symbol(f"p{Nodes[8].number} * {Nodes[8].alpha}")
@@ -44,6 +46,6 @@ SSIT_conf = {Main_Stok: Nodes[0],
             Nodes[11]: []
             }
 
-Tubes = [Tube(1, 0, 1, 1, 1), Tube(2, 1, 1, 1, 1),
-         Tube(3, 2, 1, 1, 1), Tube(4, 2, 1, 1, 1), Tube(5, 2, 1, 1, 1),
-         Tube(6, 4, 1, 1, 1)]
+Tubes = [Tube(1, 0, 1, 5, 1), Tube(2, 1, 1, 5, 1),
+         Tube(3, 2, 1, 5, 1), Tube(4, 2, 1, 5, 1), Tube(5, 2, 1, 5, 1),
+         Tube(6, 4, 1, 5, 1)]

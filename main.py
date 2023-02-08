@@ -8,8 +8,8 @@ def prepare_system(SSIT):
     SSIT.initialize_wells()
     SSIT.set_parents()
     SSIT.set_childs()
-    SSIT.set_p0(1)
-    SSIT.set_dt(1)
+    SSIT.set_p0(p0)
+    SSIT.set_dt(dt)
     return SSIT
 
 def add_eqns(SSIT):
@@ -40,6 +40,7 @@ def add_eqns(SSIT):
 def solve_and_assign(SSIT):
     SSIT.solve_system()
     SSIT.set_pressures()
+    SSIT.set_Q()
     SSIT.calculate_k()
     return SSIT
 
@@ -90,7 +91,6 @@ def main(SSIT_conf, Tubes):
         for well in MySSIT.wells:
                 well_pressures[f"p{well.number}"].append(well.pressure)
 
-    print(k)
 
     fig1 = plt.figure()
     ax = fig1.gca()

@@ -3,7 +3,7 @@ import random
 
 class Node():
     def __init__(self, number, Q = 0, alpha = 0, C = 0):
-        self.pressure = 1 + random.random()/1000
+        self.pressure = 3 + random.random()
         self.number = number
         self.name = f"Node_{number}"
         self.Q = Q
@@ -147,6 +147,15 @@ class SSIT:
                 node = self.Nodes[node_number]
                 node.pressure = self.solution[sym.Symbol(key)]
 
+    def set_Q(self):
+        for key in self.solution.keys():
+            key = str(key)
+            if key.startswith("Q"):
+                node_number = int(key[1:])
+                node = self.Nodes[node_number]
+                node.Q = self.solution[sym.Symbol(key)]
+
+
 
 
     def print_pressures(self):
@@ -162,7 +171,7 @@ class SSIT:
 
         for well in self.wells:
             number = well.number
-            self.k = self.k + (self.Nodes[number].pressure * self.Nodes[number].alpha + self.Nodes[number].C) * self.dt
+            self.k = self.k + (self.Nodes[number].Q) * self.dt
 
 
         for tube in self.tubes:
