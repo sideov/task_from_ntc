@@ -9,7 +9,7 @@ def prepare_system(SSIT):
     SSIT.set_parents()
     SSIT.set_childs()
     SSIT.set_p0(5)
-    SSIT.set_dt(0.001)
+    SSIT.set_dt(1)
     return SSIT
 
 def add_eqns(SSIT):
@@ -47,7 +47,6 @@ def solve_and_assign(SSIT):
 
 def main(SSIT_conf, Tubes):
 
-    k_mass = []
 
     MySSIT = SSIT(SSIT_conf, Tubes)
 
@@ -61,11 +60,21 @@ def main(SSIT_conf, Tubes):
 
     print("k = " + str(MySSIT.get_k()))
     k = MySSIT.get_k()
+
+    k_mass = []
+
+
     k_mass.append(k)
 
     eps = 0.1
     k_inst = 0
     iter = 0
+    k_mass = []
+    well_pressures = {}
+
+    for well in MySSIT.wells:
+        well_pressures[f"p{well.number}"] = []
+
 
     while abs(k - k_inst) > eps:
         if iter >= 30:
@@ -78,14 +87,28 @@ def main(SSIT_conf, Tubes):
         print("k = " + str(k))
         k_mass.append(k)
         iter += 1
+        for well in MySSIT.wells:
+                well_pressures[f"p{well.number}"].append(well.pressure)
 
     print(k)
 
-    plt.plot(k_mass)
-    plt.ylabel('k')
-    plt.xlabel("Номер итерации")
-    plt.semilogy()
+    fig = plt.figure()
+
+    # plt.plot(k_mass)
+
+
+    ax = fig.gca()
+
+    for well in well_pressures:
+        ax.plot(well_pressures[well])
+
+
+    ax.set_ylabel('pressures')
+    ax.set_xlabel("Номер итерации")
+    ax.legend(well_pressures.keys())
+    ax.semilogy()
     plt.show()
+
 
 
 
