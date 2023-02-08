@@ -125,7 +125,7 @@ class SSIT:
     def solve_system(self):
         solution = sym.solve(self.system)
         self.solution = solution
-        print(solution)
+        # print(solution)
 
 
     def print_solution(self):

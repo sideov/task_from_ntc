@@ -15,7 +15,7 @@ def add_eqns(SSIT):
     SSIT.add_eqns_for_wells()
     SSIT.set_eqns_for_Q()
     SSIT.add_eqns_for_tubes()
-    print(SSIT.system)
+    # print(SSIT.system)
     # for eq in SSIT.system:
     #     print(eq)
     # print("\n\n\n\n")
@@ -69,7 +69,7 @@ def main(SSIT_conf, Tubes):
 
     eps = 0.1
     k_inst = 0
-    iter = 0
+    iter = 1
     k_mass = []
     well_pressures = {}
 
@@ -78,16 +78,18 @@ def main(SSIT_conf, Tubes):
 
 
     while abs(k - k_inst) > eps:
-        if iter >= 30:
+        if iter >= 100:
             break
         MySSIT = add_eqns(MySSIT)
         MySSIT = solve_and_assign(MySSIT)
         k_inst = k
         k = MySSIT.get_k()
+        iter += 1
+        print("=======================")
+        print("iter = " + str(iter))
         print("eps = " + str(abs(k-k_inst)))
         print("k = " + str(k))
         k_mass.append(k)
-        iter += 1
         for well in MySSIT.wells:
                 well_pressures[f"p{well.number}"].append(well.pressure)
 
@@ -98,7 +100,7 @@ def main(SSIT_conf, Tubes):
     ax = fig1.gca()
     ax.set_ylabel('k')
     ax.set_xlabel("Номер итерации")
-    ax.semilogy()
+    ax.grid(True)
     ax.plot(k_mass)
 
 
@@ -112,12 +114,15 @@ def main(SSIT_conf, Tubes):
     ax.set_ylabel('pressures')
     ax.set_xlabel("Номер итерации")
     ax.legend(well_pressures.keys())
-    ax.semilogy()
+    ax.grid(True)
+
 
     fig3 = plt.figure()
     ax = fig3.gca()
     ax.plot(mist)
-
+    ax.grid(True)
+    ax.set_xlabel("Номер итерации")
+    ax.set_ylabel("eps")
 
     plt.show()
 
