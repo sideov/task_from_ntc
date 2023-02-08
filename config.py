@@ -1,6 +1,6 @@
 from classes import *
 
-p0 = 3
+p0 = 10
 
 dt = 10
 

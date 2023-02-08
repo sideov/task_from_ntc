@@ -2,8 +2,6 @@ from config import *
 import matplotlib.pyplot as plt
 
 
-
-
 def prepare_system(SSIT):
     SSIT.initialize_wells()
     SSIT.set_parents()
@@ -64,6 +62,8 @@ def main(SSIT_conf, Tubes):
 
     k_mass = []
 
+    mist = []
+
 
     k_mass.append(k)
 
@@ -91,6 +91,8 @@ def main(SSIT_conf, Tubes):
         for well in MySSIT.wells:
                 well_pressures[f"p{well.number}"].append(well.pressure)
 
+        mist.append(abs(k - k_inst))
+
 
     fig1 = plt.figure()
     ax = fig1.gca()
@@ -111,6 +113,10 @@ def main(SSIT_conf, Tubes):
     ax.set_xlabel("Номер итерации")
     ax.legend(well_pressures.keys())
     ax.semilogy()
+
+    fig3 = plt.figure()
+    ax = fig3.gca()
+    ax.plot(mist)
 
 
     plt.show()

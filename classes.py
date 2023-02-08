@@ -3,7 +3,7 @@ import random
 
 class Node():
     def __init__(self, number, Q = 0, alpha = 0, C = 0):
-        self.pressure = 3 + random.random()
+        self.pressure = 10 + random.random()
         self.number = number
         self.name = f"Node_{number}"
         self.Q = Q
