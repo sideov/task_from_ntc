@@ -8,7 +8,7 @@ def prepare_system(SSIT):
     SSIT.initialize_wells()
     SSIT.set_parents()
     SSIT.set_childs()
-    SSIT.set_p0(5)
+    SSIT.set_p0(1)
     SSIT.set_dt(1)
     return SSIT
 
@@ -92,12 +92,16 @@ def main(SSIT_conf, Tubes):
 
     print(k)
 
-    fig = plt.figure()
+    fig1 = plt.figure()
+    ax = fig1.gca()
+    ax.set_ylabel('k')
+    ax.set_xlabel("Номер итерации")
+    ax.semilogy()
+    ax.plot(k_mass)
 
-    # plt.plot(k_mass)
 
-
-    ax = fig.gca()
+    fig2 = plt.figure()
+    ax = fig2.gca()
 
     for well in well_pressures:
         ax.plot(well_pressures[well])
@@ -107,9 +111,9 @@ def main(SSIT_conf, Tubes):
     ax.set_xlabel("Номер итерации")
     ax.legend(well_pressures.keys())
     ax.semilogy()
+
+
     plt.show()
-
-
 
 
 
