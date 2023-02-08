@@ -93,6 +93,10 @@ class SSIT:
             self.eqns_for_Q.append(eqn1)
             self.eqns_for_p.append(eqn2)
 
+
+
+
+
     def set_eqns_for_Q(self):
 
         for node in self.Nodes:
@@ -109,7 +113,7 @@ class SSIT:
     def add_eqns_for_tubes(self):
         for tube in self.tubes:
             if tube.to_node == 0:
-                eqn = f"(p{tube.from_node} - {self.p0}) * {tube.D}/({tube.length**2}*{tube.mu}) - Q{tube.from_node}"
+                eqn = f"(p{tube.from_node} - {self.Nodes[tube.to_node].pressure}) * {tube.D}/({tube.length**2}*{tube.mu}) - Q{tube.from_node}"
 
             else:
                 eqn = f"(p{tube.from_node} - p{tube.to_node}) * {tube.D}/({tube.length**2}*{tube.mu}) - Q{tube.from_node}"
@@ -121,6 +125,7 @@ class SSIT:
     def solve_system(self):
         solution = sym.solve(self.system)
         self.solution = solution
+        print(solution)
 
 
     def print_solution(self):
@@ -128,6 +133,7 @@ class SSIT:
 
     def set_p0(self, p0):
         self.p0 = p0
+        self.Nodes[0].pressure = p0
 
     def set_dt(self, dt):
         self.dt = dt
