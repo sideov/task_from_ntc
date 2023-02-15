@@ -33,7 +33,7 @@ Nodes[11].C = 5
 
 SSIT_conf = {Main_Stok: Nodes[0],
             Nodes[0]: [Nodes[1]],
-            Nodes[1]: [Nodes[2]],
+            Nodes[1]: [Nodes[2], Nodes[4]],
             Nodes[2]: [Nodes[3], Nodes[5], Nodes[4]],
             Nodes[3]: [Nodes[7], Nodes[8]],
             Nodes[4]: [Nodes[10], Nodes[6]],

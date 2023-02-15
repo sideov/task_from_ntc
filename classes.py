@@ -11,7 +11,7 @@ class Node():
         self.C = C
         self.is_well = False
         self.eqn = None
-        self.parent = None
+        self.parent = []
         self.is_stok = False
         self.childs = []
 
@@ -82,16 +82,17 @@ class SSIT:
 
     def add_eqns_for_wells(self):
         for well in self.wells:
-            init_p = well.pressure
 
-            eqn1 = f"Q{well.number} - {well.alpha}*{init_p} - {well.C}"
-            eqn2 = f"p{well.number} - p{well.parent.number}"
+            eqn1 = f"Q{well.number} - {well.alpha}*p{well.number} - {well.C}"
+
+            for parent in well.parent:
+                eqn2 = f"p{well.number} - p{parent.number}"
+                self.system.append(eqn2)
+                self.eqns_for_p.append(eqn2)
 
             self.system.append(eqn1)
-            self.system.append(eqn2)
 
             self.eqns_for_Q.append(eqn1)
-            self.eqns_for_p.append(eqn2)
 
 
 
@@ -112,11 +113,27 @@ class SSIT:
 
     def add_eqns_for_tubes(self):
         for tube in self.tubes:
-            if tube.to_node == 0:
-                eqn = f"(p{tube.from_node} - {self.Nodes[tube.to_node].pressure}) * {tube.D}/({tube.length**2}*{tube.mu}) - Q{tube.from_node}"
+
+            if len(self.Nodes[tube.from_node].parent) == 2:
+                N1 = self.Nodes[tube.from_node].parent[0].number
+                N2 = self.Nodes[tube.from_node].parent[1].number
+                N3 = self.Nodes[tube.from_node].number
+                for tube in self.tubes:
+                    if tube.to_node == N2:
+                        T32 = tube
+                    elif tube.to_node == N1:
+                        T31 = tube
+
+
+                eqn = f"(p{N1}-p{N3})/(p{N1}-p{N2}) - ({T31.D})/({T32.D})"
 
             else:
-                eqn = f"(p{tube.from_node} - p{tube.to_node}) * {tube.D}/({tube.length**2}*{tube.mu}) - Q{tube.from_node}"
+
+                if tube.to_node == 0:
+                    eqn = f"(p{tube.from_node} - {self.Nodes[tube.to_node].pressure}) * {tube.D}/({tube.length**2}*{tube.mu}) - Q{tube.from_node}"
+
+                else:
+                    eqn = f"(p{tube.from_node} - p{tube.to_node}) * {tube.D}/({tube.length**2}*{tube.mu}) - Q{tube.from_node}"
 
             self.system.append(eqn)
             self.eqns_for_p.append(eqn)
@@ -201,7 +218,7 @@ class SSIT:
         for node in self.Nodes:
             if self.struct[node]:
                 for child in self.struct[node]:
-                    child.parent = node
+                    child.parent.append(node)
                     #print(child.name + " has parent " + child.parent.name)
 
 
@@ -209,7 +226,7 @@ class SSIT:
     def print_parents(self):
         for node in self.Nodes:
             if node.parent:
-                print(f'{node.name} has parent {node.parent.name}')
+                print(f'{node.name} has parent {[parent.name for parent in node.parent]}')
             else:
                 print(f'{node.name} has no parent')
                 node.is_stok = True

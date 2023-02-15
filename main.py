@@ -8,6 +8,8 @@ def prepare_system(SSIT):
     SSIT.set_childs()
     SSIT.set_p0(p0)
     SSIT.set_dt(dt)
+    SSIT.print_struct(1)
+    SSIT.print_parents()
     return SSIT
 
 def add_eqns(SSIT):
@@ -53,6 +55,8 @@ def main(SSIT_conf, Tubes):
 
     MySSIT = add_eqns(MySSIT)
 
+    print(MySSIT.system)
+
     MySSIT = solve_and_assign(MySSIT)
 
     MySSIT.print_pressures()
@@ -67,7 +71,7 @@ def main(SSIT_conf, Tubes):
 
     k_mass.append(k)
 
-    eps = 0.1
+    eps = 0.001
     k_inst = 0
     iter = 1
     k_mass = []
@@ -87,8 +91,8 @@ def main(SSIT_conf, Tubes):
         iter += 1
         print("=======================")
         print("iter = " + str(iter))
-        print("eps = " + str(abs(k-k_inst)))
         print("k = " + str(k))
+        print("eps = " + str(abs(k - k_inst)))
         k_mass.append(k)
         for well in MySSIT.wells:
                 well_pressures[f"p{well.number}"].append(well.pressure)
