@@ -46,6 +46,6 @@ SSIT_conf = {Main_Stok: Nodes[0],
             Nodes[11]: []
             }
 
-Tubes = [Tube(1, 0, 1, 5, 1), Tube(2, 1, 1, 5, 1),
-         Tube(3, 2, 1, 5, 1), Tube(4, 2, 1, 5, 1), Tube(5, 2, 1, 5, 1),
-         Tube(6, 4, 1, 5, 1)]
+Tubes = [Tube(1, 0, 1, 5, 1), Tube(2, 1, 2, 5, 1),
+         Tube(3, 2, 3, 10, 1), Tube(4, 2, 4, 5, 1), Tube(5, 2, 5, 5, 1),
+         Tube(6, 4, 6, 5, 1), Tube(4, 1, 7, 10, 1)]

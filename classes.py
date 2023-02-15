@@ -14,6 +14,7 @@ class Node():
         self.parent = []
         self.is_stok = False
         self.childs = []
+        self.parallel_work_done = False
 
     def get_name(self):
         print(self.name)
@@ -54,6 +55,10 @@ class SSIT:
 
     def get_struct(self):
         return self.struct
+
+    def refresh_some_vals(self):
+        for node in self.Nodes:
+            node.parallel_work_done = False
 
 
     def print_struct(self, node_to_print, inherit_level = 0):
@@ -113,19 +118,22 @@ class SSIT:
 
     def add_eqns_for_tubes(self):
         for tube in self.tubes:
+            eqn = ''
 
             if len(self.Nodes[tube.from_node].parent) == 2:
                 N1 = self.Nodes[tube.from_node].parent[0].number
                 N2 = self.Nodes[tube.from_node].parent[1].number
                 N3 = self.Nodes[tube.from_node].number
-                for tube in self.tubes:
-                    if tube.to_node == N2:
-                        T32 = tube
-                    elif tube.to_node == N1:
-                        T31 = tube
+                if self.Nodes[N3].parallel_work_done == False:
+                    for tube in self.tubes:
+                        if tube.to_node == N2:
+                            T32 = tube
+                        elif tube.to_node == N1:
+                            T31 = tube
 
+                    eqn = f"(p{N1}-p{N3})/(p{N1}-p{N2}) - ({T31.D})/({T32.D})"
+                    self.Nodes[N3].parallel_work_done = True
 
-                eqn = f"(p{N1}-p{N3})/(p{N1}-p{N2}) - ({T31.D})/({T32.D})"
 
             else:
 
@@ -135,8 +143,9 @@ class SSIT:
                 else:
                     eqn = f"(p{tube.from_node} - p{tube.to_node}) * {tube.D}/({tube.length**2}*{tube.mu}) - Q{tube.from_node}"
 
-            self.system.append(eqn)
-            self.eqns_for_p.append(eqn)
+            if eqn:
+                self.system.append(eqn)
+                self.eqns_for_p.append(eqn)
 
 
     def solve_system(self):

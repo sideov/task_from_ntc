@@ -14,9 +14,12 @@ def prepare_system(SSIT):
 
 def add_eqns(SSIT):
     SSIT.system = []
+    SSIT.refresh_some_vals()
     SSIT.add_eqns_for_wells()
     SSIT.set_eqns_for_Q()
     SSIT.add_eqns_for_tubes()
+    print(SSIT.system)
+
     # print(SSIT.system)
     # for eq in SSIT.system:
     #     print(eq)
@@ -62,6 +65,7 @@ def main(SSIT_conf, Tubes):
     MySSIT.print_pressures()
 
     print("k = " + str(MySSIT.get_k()))
+
     k = MySSIT.get_k()
 
     k_mass = []
